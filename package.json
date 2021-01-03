@@ -1,0 +1,18 @@
+{
+  "name": "fakerjs",
+  "version": "1.0.0",
+  "description": "Seed data with faker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "fakerjs"
+  ],
+  "author": "gtrianta",
+  "license": "ISC",
+  "dependencies": {
+    "faker": "^5.1.0"
+  }
+}
