@@ -18,4 +18,5 @@ balance: faker.random.number({ min: 0, max: 0.99, precision: 0.01 }),
 price: faker.random.number({ min: 100, max: 2000, precision: 0.01 }),
 stock: faker.random.number({ min: 0, max: 300, precision: 1 }),
 age : faker.random.number({min : 20, max : 58}),
-imageURL : faker.image.image()
+imageURL : faker.image.image(),
+amoment : moment("20111031", "YYYYMMDD").fromNow()
