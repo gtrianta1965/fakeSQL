@@ -23,13 +23,29 @@ const yesNoWithProbability = () => {
 };
 
 const readTemplateFromFile = (fileName) => {
-  let content = fs.readFileSync(TEMPLATES_PATH + "/" + fileName, "utf8");
-  return content;
+  try {
+    let content = fs.readFileSync(TEMPLATES_PATH + "/" + fileName, "utf8");
+    return content;
+  } catch (e) {
+    console.error(
+      "There was an uncaught error, check the --template command line option",
+      e.message
+    );
+    process.exit(1); //mandatory (as per the Node.js docs)
+  }
 };
 
 const readGeneratorFromFile = (fileName) => {
-  let content = fs.readFileSync(GENERATORS_PATH + "/" + fileName, "utf8");
-  return content;
+  try {
+    let content = fs.readFileSync(GENERATORS_PATH + "/" + fileName, "utf8");
+    return content;
+  } catch (e) {
+    console.error(
+      "There was an uncaught error, check the --generator command line option",
+      e.message
+    );
+    process.exit(1); //mandatory (as per the Node.js docs)
+  }
 };
 
 const returnDataFromGenerator = (generator, i) => {

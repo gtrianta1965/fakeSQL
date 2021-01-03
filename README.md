@@ -26,3 +26,17 @@ If you want to pass command line arguments then execute via node:
 ## Create your own generators
 
 You can create your own data generators. Take a look at generic.generator to get the idea of defining the field and values
+
+### Packaging
+
+For packaging I used pkg (https://github.com/vercel/pkg)
+Installation (globally) : npm install -g pkg
+
+From the project folder execute:
+npm install -g pkg
+
+The above command generated three files:
+
+- index-linux
+- index-macos
+- index-win.exe
