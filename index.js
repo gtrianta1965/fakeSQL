@@ -3,11 +3,18 @@ const faker = require("faker");
 const { fake } = require("faker");
 let argv = require("yargs/yargs")(process.argv.slice(2)).argv;
 
-console.log("Template from command line= ", argv.template);
-console.log("Executions from command line= ", argv.repeat);
+console.log("====== Command Line Options ==========");
+console.log("Template from command line:", argv.template);
+console.log("Executions from command line:", argv.repeat);
+console.log("Data generator from command line:", argv.generator);
+console.log("Start ID from command line:", argv.startid);
+console.log("=============== Data =================");
 
 //Define number of repetitions
 const numberOfExecutions = argv.repeat || 2;
+
+//Define start ID
+const startId = argv.startid || 1;
 
 //Define the function that return all the data for each repition
 
@@ -44,37 +51,22 @@ if (argv.generator) {
   //console.log(
   //  "Object dataGenerator=",
   //  utils.returnDataFromGenerator(dataGenerator, 4)
-  );
+  //);
 }
 
 const template = utils.readTemplateFromFile(argv.template || "customers.tpl");
 
 // Start procesing and print the results
 let output;
-for (i = 1; i <= numberOfExecutions; i++) {
+for (i = 0; i < numberOfExecutions; i++) {
   if (!dataGenerator) {
-    output = faker.helpers.mustache(template, getData(i));
+    output = faker.helpers.mustache(template, getData(startId + i));
     console.log(output);
   } else {
     output = faker.helpers.mustache(
       template,
-      utils.returnDataFromGenerator(dataGenerator, i)()
+      utils.returnDataFromGenerator(dataGenerator, startId + i)()
     );
     console.log(output);
   }
-  /*
-  console.log(
-    faker.helpers.mustache(
-      template,
-      utils.returnDataFromGenerator(
-        `
-        name : "George".indexOf("eo"),
-        age : faker.random.number({max : 12}),
-        yesNo : this.utils.yesNo
-      `,
-        13
-      )()
-    )
-  );
-  */
 }

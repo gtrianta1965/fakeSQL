@@ -21,7 +21,7 @@ e.g. `npm start --silent > insert_customers.sql
 
 If you want to pass command line arguments then execute via node:
 
-`node index.js --template products.tpl --repeat 12 --generator generic.generator
+`node index.js --template products.tpl --repeat 12 --generator generic.generator --startid 1
 
 ## Create your own generators
 
