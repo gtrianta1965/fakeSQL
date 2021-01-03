@@ -47,11 +47,13 @@ function getData(id) {
 let dataGenerator;
 
 if (argv.generator) {
-  dataGenerator = utils.readGeneratorFromFile("generic.generator");
+  dataGenerator = utils.readGeneratorFromFile(argv.generator);
   //console.log(
   //  "Object dataGenerator=",
   //  utils.returnDataFromGenerator(dataGenerator, 4)
   //);
+} else {
+  dataGenerator = utils.readGeneratorFromFile("generic.generator");
 }
 
 const template = utils.readTemplateFromFile(argv.template || "customers.tpl");
