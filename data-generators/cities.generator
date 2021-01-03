@@ -1,2 +1,3 @@
 city : faker.address.city(),
-amoment : moment("20111031", "YYYYMMDD").fromNow()
+amoment : moment("20111031", "YYYYMMDD").fromNow(),
+yesNo : yesNo

@@ -105,7 +105,7 @@ const readGeneratorFromFile = (fileName) => {
   }
 };
 
-const returnDataFromGenerator = (generator, i) => {
+function returnDataFromGenerator(generator, i) {
   let id = i;
 
   let returnObject = eval(
@@ -113,7 +113,9 @@ const returnDataFromGenerator = (generator, i) => {
   );
   //console.log(returnObject());
   return returnObject;
-};
+}
+
+returnDataFromGenerator = returnDataFromGenerator.bind(this);
 
 exports.utils = {
   formatDate,
