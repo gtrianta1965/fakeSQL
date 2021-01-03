@@ -13,6 +13,8 @@
   "author": "gtrianta",
   "license": "ISC",
   "dependencies": {
-    "faker": "^5.1.0"
+    "faker": "^5.1.0",
+    "moment": "^2.29.1",
+    "yargs": "^16.2.0"
   }
 }
