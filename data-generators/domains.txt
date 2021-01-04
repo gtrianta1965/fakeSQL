@@ -1,0 +1,26 @@
+{
+"domains" : [
+    { "name" : "yesno",
+      "values" : ["yes","no"]
+    },
+    { "name" : "active-inactive",
+      "values" : ["Active","Inactive"]
+    },
+    { "name" : "crud",
+      "values" : ["Create","Retrieve","Update","Delete"]
+    },
+    { "name" : "size",
+      "values" : ["XS","S","M","L","XL","2XL"]
+    },
+    { "name" : "mom",
+      "values" : [
+          "kg",
+          "gr",
+          "lt",
+          "pieces",
+          "meters",
+          "cm",
+          "mm"]
+    }
+]
+}

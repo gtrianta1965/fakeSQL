@@ -13,8 +13,10 @@
   "author": "gtrianta",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^4.1.0",
     "faker": "^5.1.0",
     "moment": "^2.29.1",
+    "mustache": "^4.1.0",
     "yargs": "^16.2.0"
   }
 }

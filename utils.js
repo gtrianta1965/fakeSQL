@@ -1,9 +1,12 @@
 const moment = require("moment");
 const faker = require("faker");
 var fs = require("fs");
+const chalk = require("chalk");
 
 const TEMPLATES_PATH = "templates";
 const GENERATORS_PATH = "data-generators";
+
+const domains = readDomainsFromFile();
 
 function readCommandLine() {
   return require("yargs")(process.argv.slice(2))
@@ -25,16 +28,24 @@ function readCommandLine() {
     .option("repeat", {
       alias: "r",
       describe: "Specify how many times the template will be called.",
+    })
+    .option("dumpdata", {
+      alias: "dd",
+      describe:
+        "Displays the data generator values. It does not run the template.",
     }).argv;
 }
 
 const printArgumentValues = (argv) => {
-  console.log("====== Command Line Options ==========");
-  console.log("Template from command line:", argv.template);
-  console.log("Executions from command line:", argv.repeat);
-  console.log("Data generator from command line:", argv.generator);
-  console.log("Start ID from command line:", argv.startid);
-  console.log("=============== Data =================");
+  const log = console.log;
+  const info = chalk.yellow;
+
+  log(info("====== Command Line Options =========="));
+  log(info("Template from command line:"), argv.template);
+  log(info("Executions from command line:"), argv.repeat);
+  log(info("Data generator from command line:"), argv.generator);
+  log(info("Start ID from command line:", argv.startid));
+  log(info("=============== Data =================\n"));
 };
 
 function getData(id) {
@@ -44,7 +55,7 @@ function getData(id) {
     lastName: faker.name.lastName().replace("'", "''"),
     company: faker.company.companyName().replace("'", "''"),
     lastTransactionDate: faker.date.past(3, new Date()),
-    birthDate: utils.formatDateTime(faker.date.past(50, new Date())),
+    birthDate: formatDateTime(faker.date.past(50, new Date())),
     identificationType: faker.random.arrayElement([
       "passport",
       "id",
@@ -52,9 +63,9 @@ function getData(id) {
       "other",
     ]),
     identification: faker.helpers.replaceSymbols("???-######-?"),
-    isActive: utils.active,
-    isActiveProb: utils.yesNoWithProbability,
-    yesNo: utils.yesNo,
+    isActive: active(),
+    isActiveProb: yesNoWithProbability,
+    yesNo: yesNo,
     productName: faker.commerce.productName,
     balance: faker.random.number({ min: 0, max: 0.99, precision: 0.01 }),
     price: faker.random.number({ min: 100, max: 2000, precision: 0.01 }),
@@ -70,9 +81,6 @@ function formatDateTime(d) {
   return moment(d).format("DD/MM/YYYY HH:mm");
 }
 
-const yesNo = () => faker.random.arrayElement(["YES", "NO"]);
-const active = () => faker.random.arrayElement(["Active", "Inactive"]);
-
 const yesNoWithProbability = () => {
   return faker.random.number({ min: 0, max: 0.99, precision: 0.01 }) > 0.9
     ? "Inactive"
@@ -85,7 +93,9 @@ const readTemplateFromFile = (fileName) => {
     return content;
   } catch (e) {
     console.error(
-      "There was an uncaught error, check the --template command line option",
+      chalk.red(
+        "There was an uncaught error, check the --template command line option"
+      ),
       e.message
     );
     process.exit(1); //mandatory (as per the Node.js docs)
@@ -98,11 +108,33 @@ const readGeneratorFromFile = (fileName) => {
     return content;
   } catch (e) {
     console.error(
-      "There was an uncaught error, check the --generator command line option",
+      chalk.red(
+        "There was an uncaught error, check the --generator command line option"
+      ),
       e.message
     );
     process.exit(1); //mandatory (as per the Node.js docs)
   }
+};
+
+function readDomainsFromFile(fileName) {
+  const _fileName = fileName || "domains.txt";
+  try {
+    let content = fs.readFileSync(GENERATORS_PATH + "/" + _fileName, "utf8");
+    return JSON.parse(content);
+  } catch (e) {
+    console.error(
+      chalk.red(
+        `There was an uncaught error during reading domains file. Make sure that domains.txt is in ${GENERATOR_PATH} directory`
+      ),
+      e.message
+    );
+  }
+}
+
+const randomValueFromDomain = (domain) => {
+  values = domains.domains.filter((d) => d.name === domain)[0].values || [];
+  return faker.random.arrayElement(values);
 };
 
 function returnDataFromGenerator(generator, i) {
@@ -120,12 +152,12 @@ returnDataFromGenerator = returnDataFromGenerator.bind(this);
 exports.utils = {
   formatDate,
   formatDateTime,
-  yesNo: yesNo,
-  active,
   yesNoWithProbability,
   readTemplateFromFile,
   readGeneratorFromFile,
   returnDataFromGenerator,
+  randomValueFromDomain,
+  readDomainsFromFile,
   readCommandLine,
   printArgumentValues,
   getData,

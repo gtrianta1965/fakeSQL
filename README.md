@@ -40,3 +40,5 @@ The above command generated three files:
 - index-linux
 - index-macos
 - index-win.exe
+
+### 04/01/2021 Added Mustache for template engine. faker.helpers.mustache is not used any more.
