@@ -2,6 +2,10 @@ const { utils } = require("./utils");
 const chalk = require("chalk");
 const Mustache = require("mustache");
 
+const custom = require("./lib");
+
+console.log(custom.doit());
+
 process.on("uncaughtException1", (error) => {
   console.log(chalk.red(error));
   process.exit(1);
