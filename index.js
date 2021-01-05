@@ -56,6 +56,7 @@ if (argv.dd) {
 
 // Start procesing and print the results
 let output;
+if (configObject.begin.length > 0) console.log(configObject.begin.join(os.EOL));
 
 for (i = 0; i < numberOfExecutions; i++) {
   if (!dataGenerator) {
@@ -70,4 +71,4 @@ for (i = 0; i < numberOfExecutions; i++) {
   if (configObject.between.length > 0)
     console.log(configObject.between.join(os.EOL));
 }
-console.log(configObject.end.join(os.EOL));
+if (configObject.end.length > 0) console.log(configObject.end.join(os.EOL));

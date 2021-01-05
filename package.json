@@ -1,5 +1,5 @@
 {
-  "name": "fakerjs",
+  "name": "fakeit",
   "version": "1.0.0",
   "description": "Seed data with faker",
   "main": "index.js",
