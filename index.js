@@ -6,11 +6,7 @@ const { utils } = require("./utils");
 const { config } = require("./lib/config");
 
 let dataGenerator, template;
-let configObject = {};
-
-const custom = require("./lib");
-
-//custom.doit();
+let configObject = config.configuration;
 
 process.on("uncaughtException1", (error) => {
   console.log(chalk.red(error));
@@ -60,7 +56,7 @@ if (argv.dd) {
 
 // Start procesing and print the results
 let output;
-console.log(configObject.begin.join(os.EOL));
+
 for (i = 0; i < numberOfExecutions; i++) {
   if (!dataGenerator) {
     output = Mustache.render(template, utils.getData(startId + i));

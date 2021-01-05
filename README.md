@@ -33,7 +33,7 @@ For packaging I used pkg (https://github.com/vercel/pkg)
 Installation (globally) : npm install -g pkg
 
 From the project folder execute:
-npm install -g pkg
+pkg index.js
 
 The above command generated three files:
 
