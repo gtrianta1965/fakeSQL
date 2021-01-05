@@ -1,19 +1,25 @@
-const { utils } = require("./utils");
+const os = require("os");
 const chalk = require("chalk");
 const Mustache = require("mustache");
 
+const { utils } = require("./utils");
+const { config } = require("./lib/config");
+
+let dataGenerator, template;
+let configObject = {};
+
 const custom = require("./lib");
 
-console.log(custom.doit());
+//custom.doit();
 
 process.on("uncaughtException1", (error) => {
   console.log(chalk.red(error));
   process.exit(1);
 });
 
-let argv = utils.readCommandLine();
+let argv = config.readCommandLine();
 
-utils.printArgumentValues(argv);
+config.printArgumentValues(argv);
 
 //Define number of repetitions
 const numberOfExecutions = argv.repeat || 2;
@@ -23,12 +29,26 @@ const startId = argv.startid || 1;
 
 //Define the function that return all the data for each repition
 
-//Define the generator
-let dataGenerator = argv.generator || "generic.generator";
-dataGenerator = utils.readGeneratorFromFile(dataGenerator);
+if (argv.config) {
+  configObject = config.readConfigFile(argv.config);
 
-//Define the template
-const template = utils.readTemplateFromFile(argv.template || "customers.tpl");
+  dataGenerator = configObject.data.join();
+  template = configObject.template.join(os.EOL);
+
+  if (argv.dd) {
+    console.log("config object", configObject);
+  }
+  //process.exit(1);
+} else {
+  // No config specified. Read template and generator seperately
+
+  //Define the generator
+  dataGenerator = argv.generator || "generic.generator";
+  dataGenerator = config.readGeneratorFromFile(dataGenerator);
+
+  //Define the template
+  template = config.readTemplateFromFile(argv.template || "customers.tpl");
+}
 
 if (argv.dd) {
   console.log(
@@ -40,6 +60,7 @@ if (argv.dd) {
 
 // Start procesing and print the results
 let output;
+console.log(configObject.begin.join(os.EOL));
 for (i = 0; i < numberOfExecutions; i++) {
   if (!dataGenerator) {
     output = Mustache.render(template, utils.getData(startId + i));
@@ -48,6 +69,9 @@ for (i = 0; i < numberOfExecutions; i++) {
       template,
       utils.returnDataFromGenerator(dataGenerator, startId + i)()
     );
-    console.log(chalk.green(output));
   }
+  console.log(chalk.green(output));
+  if (configObject.between.length > 0)
+    console.log(configObject.between.join(os.EOL));
 }
+console.log(configObject.end.join(os.EOL));

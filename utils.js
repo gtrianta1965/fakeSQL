@@ -1,52 +1,13 @@
 const moment = require("moment");
 const faker = require("faker");
-var fs = require("fs");
 const chalk = require("chalk");
 
-const TEMPLATES_PATH = "templates";
-const GENERATORS_PATH = "data-generators";
+const { config } = require("./lib/config");
+const CUSTOM = require("./lib");
 
-const domains = readDomainsFromFile();
+custom = new CUSTOM(faker);
 
-function readCommandLine() {
-  return require("yargs")(process.argv.slice(2))
-    .usage("$0 <cmd> [args]")
-    .option("template", {
-      alias: "t",
-      describe: "Specify the template. Must reside in the templates folder.",
-    })
-    .option("generator", {
-      alias: "g",
-      describe:
-        "Specify a generator of data. Must reside in data-generators folder.",
-    })
-    .option("startid", {
-      alias: "s",
-      describe:
-        "Specify the start id when templates contains the {{id}} substitution.",
-    })
-    .option("repeat", {
-      alias: "r",
-      describe: "Specify how many times the template will be called.",
-    })
-    .option("dumpdata", {
-      alias: "dd",
-      describe:
-        "Displays the data generator values. It does not run the template.",
-    }).argv;
-}
-
-const printArgumentValues = (argv) => {
-  const log = console.log;
-  const info = chalk.yellow;
-
-  log(info("====== Command Line Options =========="));
-  log(info("Template from command line:"), argv.template);
-  log(info("Executions from command line:"), argv.repeat);
-  log(info("Data generator from command line:"), argv.generator);
-  log(info("Start ID from command line:", argv.startid));
-  log(info("=============== Data =================\n"));
-};
+const domains = config.readDomainsFromFile();
 
 function getData(id) {
   return {
@@ -87,62 +48,22 @@ const yesNoWithProbability = () => {
     : "Active";
 };
 
-const readTemplateFromFile = (fileName) => {
-  try {
-    let content = fs.readFileSync(TEMPLATES_PATH + "/" + fileName, "utf8");
-    return content;
-  } catch (e) {
-    console.error(
-      chalk.red(
-        "There was an uncaught error, check the --template command line option"
-      ),
-      e.message
-    );
-    process.exit(1); //mandatory (as per the Node.js docs)
-  }
-};
-
-const readGeneratorFromFile = (fileName) => {
-  try {
-    let content = fs.readFileSync(GENERATORS_PATH + "/" + fileName, "utf8");
-    return content;
-  } catch (e) {
-    console.error(
-      chalk.red(
-        "There was an uncaught error, check the --generator command line option"
-      ),
-      e.message
-    );
-    process.exit(1); //mandatory (as per the Node.js docs)
-  }
-};
-
-function readDomainsFromFile(fileName) {
-  const _fileName = fileName || "domains.txt";
-  try {
-    let content = fs.readFileSync(GENERATORS_PATH + "/" + _fileName, "utf8");
-    return JSON.parse(content);
-  } catch (e) {
-    console.error(
-      chalk.red(
-        `There was an uncaught error during reading domains file. Make sure that domains.txt is in ${GENERATOR_PATH} directory`
-      ),
-      e.message
-    );
-  }
-}
-
 const randomValueFromDomain = (domain) => {
   values = domains.domains.filter((d) => d.name === domain)[0].values || [];
   return faker.random.arrayElement(values);
 };
 
 function returnDataFromGenerator(generator, i) {
+  let returnObject;
   let id = i;
-
-  let returnObject = eval(
-    "() => { let self=this; return {" + generator + ", id : id}}"
-  );
+  try {
+    returnObject = eval(
+      "() => { let self=this; return {" + generator + ", id : id}}"
+    );
+  } catch (e) {
+    console.log(chalk.red("Error during parsing of data : " + e.message));
+    process.exit(1);
+  }
   //console.log(returnObject());
   return returnObject;
 }
@@ -153,12 +74,7 @@ exports.utils = {
   formatDate,
   formatDateTime,
   yesNoWithProbability,
-  readTemplateFromFile,
-  readGeneratorFromFile,
   returnDataFromGenerator,
   randomValueFromDomain,
-  readDomainsFromFile,
-  readCommandLine,
-  printArgumentValues,
   getData,
 };
