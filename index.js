@@ -49,9 +49,6 @@ if (argv.config) {
 // Start procesing and print the results
 let output;
 
-//print the header
-if (configObject.begin.length > 0) console.log(configObject.begin.join(os.EOL));
-
 for (i = 0; i < numberOfExecutions; i++) {
   let generatedData = {};
   if (!dataGenerator) {
@@ -63,6 +60,13 @@ for (i = 0; i < numberOfExecutions; i++) {
   generatedData.executionCurrent = i + 1;
   generatedData.executionLast = numberOfExecutions;
 
+  //is it the first time? Then render the begin sectio
+  if (i === 0 && configObject.begin.length > 0) {
+    console.log(
+      Mustache.render(configObject.begin.join(os.EOL), generatedData)
+    );
+  }
+
   //if we been asked to dump the data then do it
   if (argv.dd) {
     console.log("Generator data", generatedData);
@@ -73,5 +77,9 @@ for (i = 0; i < numberOfExecutions; i++) {
   console.log(chalk.green(output));
   if (configObject.between.length > 0)
     console.log(configObject.between.join(os.EOL));
+
+  //is it the last iteration? Then render the end section
+  if (i === numberOfExecutions - 1 && configObject.end.length > 0) {
+    console.log(Mustache.render(configObject.end.join(os.EOL), generatedData));
+  }
 }
-if (configObject.end.length > 0) console.log(configObject.end.join(os.EOL));

@@ -10,6 +10,27 @@ custom = new CUSTOM(faker);
 
 const domains = config.readDomainsFromFile();
 
+const fake = faker.fake;
+const unique = faker.unique;
+const random = faker.random;
+const helpers = faker.helpers;
+const name = faker.name;
+const address = faker.address;
+const company = faker.company;
+const finance = faker.finance;
+const image = faker.image;
+const lorem = faker.lorem;
+const hacker = faker.hacker;
+const interner = faker.internet;
+const database = faker.database;
+const phone = faker.phone;
+const date = faker.date;
+const commerce = faker.commerce;
+const system = faker.system;
+const git = faker.git;
+const vehicle = faker.vehicle;
+const music = faker.music;
+
 function getData(id) {
   return {
     id: id,
