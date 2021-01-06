@@ -37,3 +37,6 @@ for (i = 0; i < 10; i++) {
 console.log("Faker.fake=", result);
 
 console.log("type=", typeof faker.name.firstName());
+
+a = "//This is a comment";
+if (a.match(/^\/\//)) console.log("Begins OK");
