@@ -56,17 +56,22 @@ if (argv.dd) {
 
 // Start procesing and print the results
 let output;
+
+//print the header
 if (configObject.begin.length > 0) console.log(configObject.begin.join(os.EOL));
 
 for (i = 0; i < numberOfExecutions; i++) {
+  let generatedData = {};
   if (!dataGenerator) {
-    output = Mustache.render(template, utils.getData(startId + i));
+    generatedData = utils.getData(startId + i);
   } else {
-    output = Mustache.render(
-      template,
-      utils.returnDataFromGenerator(dataGenerator, startId + i)()
-    );
+    generatedData = utils.returnDataFromGenerator(dataGenerator, startId + i)();
   }
+  //inject additional data
+  generatedData.executionCurrent = i + 1;
+  generatedData.executionLast = numberOfExecutions;
+
+  output = Mustache.render(template, generatedData);
   console.log(chalk.green(output));
   if (configObject.between.length > 0)
     console.log(configObject.between.join(os.EOL));
