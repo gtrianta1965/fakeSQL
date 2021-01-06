@@ -2,3 +2,4 @@ city : faker.address.city(),
 amoment : moment("20111031", "YYYYMMDD").fromNow(),
 yesNo : randomValueFromDomain('yesno'),
 upperCity : function() { return this.city.toUpperCase()},
+yesnop : randomValueFromDomain('yesno',85)

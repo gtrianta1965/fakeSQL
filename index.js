@@ -46,14 +46,6 @@ if (argv.config) {
   template = config.readTemplateFromFile(argv.template || "customers.tpl");
 }
 
-if (argv.dd) {
-  console.log(
-    "Generator data (id is set to 1)",
-    utils.returnDataFromGenerator(dataGenerator, 1)()
-  );
-  process.exit(0);
-}
-
 // Start procesing and print the results
 let output;
 
@@ -70,6 +62,12 @@ for (i = 0; i < numberOfExecutions; i++) {
   //inject additional data
   generatedData.executionCurrent = i + 1;
   generatedData.executionLast = numberOfExecutions;
+
+  //if we been asked to dump the data then do it
+  if (argv.dd) {
+    console.log("Generator data", generatedData);
+    process.exit(0);
+  }
 
   output = Mustache.render(template, generatedData);
   console.log(chalk.green(output));

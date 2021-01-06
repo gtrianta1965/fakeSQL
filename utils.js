@@ -1,6 +1,7 @@
 const moment = require("moment");
 const faker = require("faker");
 const chalk = require("chalk");
+const _ = require("lodash");
 
 const { config } = require("./lib/config");
 const CUSTOM = require("./lib");
@@ -42,15 +43,12 @@ function formatDateTime(d) {
   return moment(d).format("DD/MM/YYYY HH:mm");
 }
 
-const yesNoWithProbability = () => {
-  return faker.random.number({ min: 0, max: 0.99, precision: 0.01 }) > 0.9
-    ? "Inactive"
-    : "Active";
-};
-
-const randomValueFromDomain = (domain) => {
+const randomValueFromDomain = (domain, _probability) => {
   values = domains.domains.filter((d) => d.name === domain)[0].values || [];
-  return faker.random.arrayElement(values);
+  let propability = _probability || 0;
+  return faker.random.number({ min: 0, max: 100, precision: 1 }) <= propability
+    ? values[0]
+    : faker.random.arrayElement(values);
 };
 
 function returnDataFromGenerator(generator, i) {
@@ -73,7 +71,6 @@ returnDataFromGenerator = returnDataFromGenerator.bind(this);
 exports.utils = {
   formatDate,
   formatDateTime,
-  yesNoWithProbability,
   returnDataFromGenerator,
   randomValueFromDomain,
   getData,
