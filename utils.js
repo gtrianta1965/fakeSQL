@@ -72,13 +72,10 @@ const randomValueFromDomain = (domain, _probability) => {
     : faker.random.arrayElement(values);
 };
 
-function returnDataFromGenerator(generator, i) {
+function returnDataFromGenerator(generator) {
   let returnObject;
-  let id = i;
   try {
-    returnObject = eval(
-      "() => { let self=this; return {" + generator + ", id : id}}"
-    );
+    returnObject = eval("() => { let self=this; return {" + generator + "}}");
   } catch (e) {
     console.log(chalk.red("Error during parsing of data : " + e.message));
     process.exit(1);

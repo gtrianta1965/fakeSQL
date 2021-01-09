@@ -57,6 +57,7 @@ for (i = 0; i < numberOfExecutions; i++) {
     generatedData = utils.returnDataFromGenerator(dataGenerator, startId + i)();
   }
   //inject additional data
+  generatedData.id = i + startId;
   generatedData.executionCurrent = i + 1;
   generatedData.executionLast = numberOfExecutions;
 
